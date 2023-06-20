@@ -1,0 +1,7 @@
+.centered-image {
+    text-align: center;
+}
+
+.centered-image img {
+    width: 500px;
+}

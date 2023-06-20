@@ -1,0 +1,12 @@
+{{ define "main" }}
+  {{ with .GetPage "posts/about-page.md" }}
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+  {{ end }}
+
+  <h2>Recent Posts</h2>
+  {{ range first 5 (where .Site.RegularPages "Type" "posts") }}
+    <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+    <p>{{ .Summary }}</p>
+  {{ end }}
+{{ end }}
