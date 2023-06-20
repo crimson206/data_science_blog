@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Introduction#The fundamental concept behind gradient descent is to minimize a function \(E = E(w)\). The gradient \(\nabla_\mathbf{W} E\)indicates the direction in which \(E\)increases the fastest at a point, and the objective is to modify the values of \(\mathbf{W}\)iteratively to minimize \(E\). This is achieved by updating the values of \(w\)as follows:
+\[\mathbf{W}^{\prime}=\mathbf{W}-\eta \nabla_\mathbf{W} E \]Here, \(\eta\)is the learning rate.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Introduction" />
+<meta property="og:description" content="Introduction#The fundamental concept behind gradient descent is to minimize a function \(E = E(w)\). The gradient \(\nabla_\mathbf{W} E\)indicates the direction in which \(E\)increases the fastest at a point, and the objective is to modify the values of \(\mathbf{W}\)iteratively to minimize \(E\). This is achieved by updating the values of \(w\)as follows:
+\[\mathbf{W}^{\prime}=\mathbf{W}-\eta \nabla_\mathbf{W} E \]Here, \(\eta\)is the learning rate." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/docs/data_science/sgd/introduction/" /><meta property="article:section" content="docs" />
+
+
+<title>Introduction | Discovering Data Science with Crimson</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.1866aa86371c3a1b25fd2be3b8076269f0a69be601d71a1abc300d81212aac71.js" integrity="sha256-GGaqhjccOhsl/SvjuAdiafCmm&#43;YB1xoavDANgSEqrHE=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>Discovering Data Science with Crimson</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="" aria-label="" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li class="book-section-flat" >
+          
+  
+  
+
+  
+    <span>Data Science</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-306faa5a4e52430ecea1d95c3f337ebf" class="toggle" checked />
+    <label for="section-306faa5a4e52430ecea1d95c3f337ebf" class="flex justify-between">
+      <a role="button" class="">Stochastic Gradient Descent</a>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/data_science/sgd/introduction/" class="active">Introduction</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Introduction</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#forward-propagation">Forward Propagation</a></li>
+    <li><a href="#backward-propagation">Backward Propagation</a></li>
+    <li><a href="#symbol-definitions">Symbol Definitions</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="introduction">
+  Introduction
+  <a class="anchor" href="#introduction">#</a>
+</h1>
+<p>The fundamental concept behind gradient descent is to minimize a function 
+<link rel="stylesheet" href="/katex/katex.min.css" />
+<script defer src="/katex/katex.min.js"></script>
+<script defer src="/katex/auto-render.min.js" onload="renderMathInElement(document.body);"></script><span>
+  \(E = E(w)\)
+</span>
+. The gradient <span>
+  \(\nabla_\mathbf{W} E\)
+</span>
+ indicates the direction in which <span>
+  \(E\)
+</span>
+ increases the fastest at a point, and the objective is to modify the values of <span>
+  \(\mathbf{W}\)
+</span>
+ iteratively to minimize <span>
+  \(E\)
+</span>
+. This is achieved by updating the values of <span>
+  \(w\)
+</span>
+ as follows:</p>
+<span>
+  \[
+\mathbf{W}^{\prime}=\mathbf{W}-\eta \nabla_\mathbf{W} E \]
+</span>
+
+<p>Here, <span>
+  \(\eta\)
+</span>
+ is the learning rate. In the subsequent sections, we will derive the equations necessary for this process, while keeping the text succinct and to the point.</p>
+<h2 id="forward-propagation">
+  Forward Propagation
+  <a class="anchor" href="#forward-propagation">#</a>
+</h2>
+<p>Forward propagation refers to the computation of the output of a neural network given an input <span>
+  \(\mathbf{x}\)
+</span>
+. The equations for forward propagation are:</p>
+<span>
+  \[
+\begin{aligned}
+E &amp; = \frac{1}{2}(t-y)^{2} \\
+\mathbf{y} &amp; = \mathbf{W}_n \mathbf{z}_{n-1} &#43; \mathbf{b}_n \\
+\mathbf{z}_n &amp; = h(\mathbf{a}_n) \\
+\mathbf{a}_n &amp; = \mathbf{W}_n \mathbf{z}_{n-1} &#43; \mathbf{b}_n \\
+\mathbf{a}_1 &amp; = \mathbf{W}_1 \mathbf{x} &#43; \mathbf{b}_1 \\
+\end{aligned}\]
+</span>
+
+<p>We can visualize the forward propagation process as follows:</p>
+<div class="centered-image">
+    <img src="/images/sgd/introduction/forward_propagation.jpg" alt="An elephant at sunset" />
+    <p></p>
+</div>
+
+<h2 id="backward-propagation">
+  Backward Propagation
+  <a class="anchor" href="#backward-propagation">#</a>
+</h2>
+<p>Backward propagation is used to compute the gradients of the error with respect to the weights and biases in a neural network. The equations for backward propagation are:</p>
+<span>
+  \[
+\begin{aligned}
+\mathbf{\Delta y} 
+&amp;= \nabla_{\mathbf{y}} E = \mathbf{t} - \mathbf{y} \\
+\mathbf{\Delta a} 
+&amp;= \nabla_{\mathbf{a}} E = (\nabla_{\mathbf{y}} \mathbf{a})^\top \mathbf{\Delta y} \\
+\mathbf{\Delta z}_{n-1} 
+&amp;= \mathbf{W}_{n}^{\top} \mathbf{\Delta a}_{n} \\
+\mathbf{\Delta a}_{n-1} 
+&amp;= h&#39;(\mathbf{a}_{n-1}) \odot \mathbf{\Delta z}_{n} \\
+&amp;= h&#39;(\mathbf{a}_{n-1})\mathbf{W}_{n}^{\top} \mathbf{\Delta a}_{n}
+\end{aligned}\]
+</span>
+
+<p>where <span>
+  \(\Delta\)
+</span>
+ denotes the gradient of the error with respect to a variable. The visualization of backward propagation is shown below:</p>
+<div class="centered-image">
+    <img src="/images/sgd/introduction/backward_propagation.jpg" alt="Backward propagation" />
+    <p></p>
+</div>
+
+<h2 id="symbol-definitions">
+  Symbol Definitions
+  <a class="anchor" href="#symbol-definitions">#</a>
+</h2>
+<p>Table 1 lists the symbols used in this document, along with their names, alternative names, and alternative symbols.</p>
+<div class="centered-image">
+    <img src="/images/sgd/introduction/symbolic_definition_table.jpg" alt="An elephant at sunset" />
+    <p>Table1 : Symbols, main names, alternative names, and alternative symbols</p>
+</div>
+
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#forward-propagation">Forward Propagation</a></li>
+    <li><a href="#backward-propagation">Backward Propagation</a></li>
+    <li><a href="#symbol-definitions">Symbol Definitions</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="http://example.org/css/styles.min.css">
