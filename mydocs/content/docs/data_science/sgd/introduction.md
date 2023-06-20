@@ -30,7 +30,7 @@ E & = \frac{1}{2}(t-y)^{2} \\
 
 We can visualize the forward propagation process as follows:
 
-{{< centerfigure src="/images/sgd/introduction/forward_propagation.jpg" alt="An elephant at sunset" caption="" >}}
+{{< centerfigure src="{{.Site.BaseURL}}/images/sgd/introduction/forward_propagation.jpg" alt="Forward Propagation" caption="" >}}
 
 ## Backward Propagation
 
@@ -52,10 +52,10 @@ Backward propagation is used to compute the gradients of the error with respect 
 
 where {{< katex >}}\Delta{{< /katex >}} denotes the gradient of the error with respect to a variable. The visualization of backward propagation is shown below:
 
-{{< centerfigure src="/images/sgd/introduction/backward_propagation.jpg" alt="Backward propagation" caption="" >}}
+{{< centerfigure src="{{.Site.BaseURL}}/images/sgd/introduction/backward_propagation.jpg" alt="Backward propagation" caption="" >}}
 
 ## Symbol Definitions
 
 Table 1 lists the symbols used in this document, along with their names, alternative names, and alternative symbols.
 
-{{< centerfigure src="/images/sgd/introduction/symbolic_definition_table.jpg" alt="An elephant at sunset" caption="Table1 : Symbols, main names, alternative names, and alternative symbols" >}}
+{{< centerfigure src="{{.Site.BaseURL}}/images/sgd/introduction/symbolic_definition_table.jpg" alt="An elephant at sunset" caption="Table1 : Symbols, main names, alternative names, and alternative symbols" >}}
