@@ -1,0 +1,6 @@
+[submodule "mydocs/themes/hugo-book"]
+	path = mydocs/themes/hugo-book
+	url = https://github.com/alex-shpak/hugo-book
+[submodule "example_site/themes/hugo-book"]
+	path = example_site/themes/hugo-book
+	url = https://github.com/alex-shpak/hugo-book
