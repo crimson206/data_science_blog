@@ -2,25 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://example.org/docs/data_science/</loc>
+    <loc>https://crimson206.github.io/docs/data_science/</loc>
   </url><url>
-    <loc>http://example.org/docs/data_science/sgd/introduction/</loc>
+    <loc>https://crimson206.github.io/docs/data_science/sgd/introduction/</loc>
   </url><url>
-    <loc>http://example.org/posts/about-page/</loc>
+    <loc>https://crimson206.github.io/posts/about-page/</loc>
     <lastmod>2023-06-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/docs/data_science/sgd/</loc>
+    <loc>https://crimson206.github.io/docs/data_science/sgd/</loc>
   </url><url>
-    <loc>http://example.org/posts/</loc>
+    <loc>https://crimson206.github.io/posts/</loc>
     <lastmod>2023-06-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/</loc>
+    <loc>https://crimson206.github.io/</loc>
     <lastmod>2023-06-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://example.org/categories/</loc>
+    <loc>https://crimson206.github.io/categories/</loc>
   </url><url>
-    <loc>http://example.org/docs/</loc>
+    <loc>https://crimson206.github.io/docs/</loc>
   </url><url>
-    <loc>http://example.org/tags/</loc>
+    <loc>https://crimson206.github.io/tags/</loc>
   </url>
 </urlset>

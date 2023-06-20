@@ -2,9 +2,9 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Data Science on Discovering Data Science with Crimson</title>
-    <link>http://example.org/docs/data_science/</link>
+    <link>https://crimson206.github.io/docs/data_science/</link>
     <description>Recent content in Data Science on Discovering Data Science with Crimson</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="http://example.org/docs/data_science/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language><atom:link href="https://crimson206.github.io/docs/data_science/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
