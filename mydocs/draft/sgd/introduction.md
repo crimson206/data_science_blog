@@ -3,6 +3,8 @@ title: Introduction
 weight: 1
 ---
 
+
+
 # Introduction
 
 The fundamental concept behind gradient descent is to minimize a function {{< katex >}}E = E(w){{< /katex >}}. The gradient {{< katex >}}\nabla_\mathbf{W} E{{< /katex >}} indicates the direction in which {{< katex >}}E{{< /katex >}} increases the fastest at a point, and the objective is to modify the values of {{< katex >}}\mathbf{W}{{< /katex >}} iteratively to minimize {{< katex >}}E{{< /katex >}}. This is achieved by updating the values of {{< katex >}}w{{< /katex >}} as follows:
