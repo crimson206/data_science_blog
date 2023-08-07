@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Attention Calculation#In the following section, we&rsquo;ll explore the core concept of attention calculation in Transformers, an integral mechanism that empowers them to capture relationships within sequences.
+Discover how Queries, Keys, and Values interact to create this impactful feature.
+Contents#Query, Key and Value Attention Score Attention Probability Output Mask Fuction : calculate_attention Setup (Run this first to practice with codes) 1. Initializing Query, Key, and Value#In Transformers, we deal with three main components: Query, Key, and Value.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
+<meta property="og:description" content="Attention Calculation#In the following section, we&rsquo;ll explore the core concept of attention calculation in Transformers, an integral mechanism that empowers them to capture relationships within sequences.
+Discover how Queries, Keys, and Values interact to create this impactful feature.
+Contents#Query, Key and Value Attention Score Attention Probability Output Mask Fuction : calculate_attention Setup (Run this first to practice with codes) 1. Initializing Query, Key, and Value#In Transformers, we deal with three main components: Query, Key, and Value." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://crimson206.github.io/data_science_blog/docs/data_science/nlp/transformers/calculate_attention/" /><meta property="article:section" content="docs" />
+
+
+<title>Calculate Attention | Discovering Data Science with Crimson</title>
+<link rel="manifest" href="/data_science_blog/manifest.json">
+<link rel="icon" href="/data_science_blog/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/data_science_blog/book.min.33a48f5432973b8ff9a82679d9e45d67f2c15d4399bd2829269455cfe390b5e8.css" integrity="sha256-M6SPVDKXO4/5qCZ52eRdZ/LBXUOZvSgpJpRVz&#43;OQteg=" crossorigin="anonymous">
+  <script defer src="/data_science_blog/flexsearch.min.js"></script>
+  <script defer src="/data_science_blog/en.search.min.a2040b3bb4198ad5c945338be7050307a399d764565c1e3bb5d4f76954ca9508.js" integrity="sha256-ogQLO7QZitXJRTOL5wUDB6OZ12RWXB47tdT3aVTKlQg=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/data_science_blog/"><span>Discovering Data Science with Crimson</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="" aria-label="" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li class="book-section-flat" >
+          
+  
+  
+
+  
+    <span>Data Science</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-b2f022745f8088cd643ee6d2da035e6b" class="toggle" checked />
+    <label for="section-b2f022745f8088cd643ee6d2da035e6b" class="flex justify-between">
+      <a role="button" class="">Natural Language Process</a>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-d06abac363844c6f23395806fd3fb26d" class="toggle" checked />
+    <label for="section-d06abac363844c6f23395806fd3fb26d" class="flex justify-between">
+      <a role="button" class="">Transformers</a>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/data_science_blog/docs/data_science/nlp/transformers/calculate_attention/" class="active">Calculate Attention</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/data_science_blog/docs/data_science/nlp/transformers/position_embedding/" class="">Position Embedding</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/data_science_blog/docs/data_science/nlp/transformers/token_embedding/" class="">Token Embedding</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/data_science_blog/posts/"  >
+        Blog
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/data_science_blog/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Calculate Attention</strong>
+
+  <label for="toc-control">
+    
+    <img src="/data_science_blog/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#contents">Contents</a></li>
+    <li><a href="#1-initializing-query-key-and-value">1. Initializing Query, Key, and Value</a></li>
+    <li><a href="#2-attention-score">2. Attention Score</a></li>
+    <li><a href="#3-attention-probability">3. Attention Probability</a></li>
+    <li><a href="#4-output">4. Output</a></li>
+    <li><a href="#5-masked-attention-probabilities">5. Masked Attention Probabilities</a></li>
+    <li><a href="#6-function-for-attention-computation">6. Function for Attention computation</a></li>
+    <li><a href="#7setup-run-this-first-to-practice-with-codes">7.Setup (Run this first to practice with codes)</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="attention-calculation">
+  Attention Calculation
+  <a class="anchor" href="#attention-calculation">#</a>
+</h1>
+<p>In the following section, we&rsquo;ll explore the core concept of attention calculation in Transformers, an integral mechanism that empowers them to capture relationships within sequences.</p>
+<p>Discover how Queries, Keys, and Values interact to create this impactful feature.</p>
+<h2 id="contents">
+  Contents
+  <a class="anchor" href="#contents">#</a>
+</h2>
+<ul>
+<li><a href="#1-initializing-query-key-and-value">Query, Key and Value</a></li>
+<li><a href="#2-attention-score">Attention Score</a></li>
+<li><a href="#3-attention-probability">Attention Probability</a></li>
+<li><a href="#4-output">Output</a></li>
+<li><a href="#5-masked-attention-probabilities">Mask</a></li>
+<li><a href="#6-function-for-attention-computation">Fuction : calculate_attention</a></li>
+<li><a href="#7setup-run-this-first-to-practice-with-codes">Setup (Run this first to practice with codes)</a></li>
+</ul>
+<h2 id="1-initializing-query-key-and-value">
+  1. Initializing Query, Key, and Value
+  <a class="anchor" href="#1-initializing-query-key-and-value">#</a>
+</h2>
+<p>In Transformers, we deal with three main components: Query, Key, and Value.</p>
+<p>All three share the shape
+
+<link rel="stylesheet" href="/data_science_blog/katex/katex.min.css" />
+<script defer src="/data_science_blog/katex/katex.min.js"></script>
+<script defer src="/data_science_blog/katex/auto-render.min.js" onload="renderMathInElement(document.body);"></script><span>
+  \(
+(n_{\text{batch}}, n_{\text{sequence}}, n_{\text{embed}})\)
+</span>
+.</p>
+<p>Consider embeddings as defining features for each sequence.</p>
+<p>While random weights won&rsquo;t yield insightful outputs, remember:</p>
+<ul>
+<li>Q, K, and V arise from a &ldquo;single input&rdquo; but via &ldquo;distinct weights&rdquo;.</li>
+<li>Through weight optimization, Transformers refine and produce significant outputs.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>seed(<span style="color:#ae81ff">42</span>)
+</span></span><span style="display:flex;"><span>data <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">4</span>)  <span style="color:#75715e"># 1 batch, sequence length of 10, and embedding dimension of 4</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>W_q <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(data<span style="color:#f92672">.</span>shape[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], <span style="color:#ae81ff">4</span>)  <span style="color:#75715e"># Weight for projecting data to Query</span>
+</span></span><span style="display:flex;"><span>W_k <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(data<span style="color:#f92672">.</span>shape[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], <span style="color:#ae81ff">4</span>)  <span style="color:#75715e"># Weight for projecting data to Key</span>
+</span></span><span style="display:flex;"><span>W_v <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(data<span style="color:#f92672">.</span>shape[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], <span style="color:#ae81ff">4</span>)  <span style="color:#75715e"># Weight for projecting data to Value</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>query <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>matmul(data, W_q)
+</span></span><span style="display:flex;"><span>key <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>matmul(data, W_k)
+</span></span><span style="display:flex;"><span>value <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>matmul(data, W_v)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Similarity injection.</span>
+</span></span><span style="display:flex;"><span>query[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> [<span style="color:#ae81ff">2</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>]
+</span></span><span style="display:flex;"><span>key[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">5</span>] <span style="color:#f92672">=</span> [<span style="color:#ae81ff">2</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>d_k <span style="color:#f92672">=</span> key<span style="color:#f92672">.</span>shape[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>attention_score <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>matmul(query, np<span style="color:#f92672">.</span>transpose(key, (<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>))) <span style="color:#75715e"># Q x K^T, (n_batch, seq_len, seq_len)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># a precaution to handle the potential problem of having large dot products</span>
+</span></span><span style="display:flex;"><span>attention_score <span style="color:#f92672">=</span> attention_score <span style="color:#f92672">/</span> np<span style="color:#f92672">.</span>sqrt(d_k)
+</span></span></code></pre></div><hr>
+<h2 id="2-attention-score">
+  2. Attention Score
+  <a class="anchor" href="#2-attention-score">#</a>
+</h2>
+<p>Each sequence is represented by an embedding vector.</p>
+<p>The attention score between any sequence pair from the Query and Key is derived from their dot product. This means both similarity and magnitude play roles.</p>
+<p>Note the high score at our point of observation.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>draw_mat_multi(
+</span></span><span style="display:flex;"><span>    query[<span style="color:#ae81ff">0</span>],
+</span></span><span style="display:flex;"><span>    key[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>T,
+</span></span><span style="display:flex;"><span>    attention_score[<span style="color:#ae81ff">0</span>],
+</span></span><span style="display:flex;"><span>    [<span style="color:#e6db74">&#34;Fearues&#34;</span>, <span style="color:#e6db74">&#34;Sequences&#34;</span>, <span style="color:#e6db74">&#34;Query&#34;</span>],
+</span></span><span style="display:flex;"><span>    [<span style="color:#e6db74">&#34;Sequences&#34;</span>, <span style="color:#e6db74">&#34;Fearues&#34;</span>, <span style="color:#e6db74">&#34;Key.T&#34;</span>],
+</span></span><span style="display:flex;"><span>    [<span style="color:#e6db74">&#34;Key Sequences&#34;</span>, <span style="color:#e6db74">&#34;Query Sequences&#34;</span>, <span style="color:#e6db74">&#34;Attention Score&#34;</span>],
+</span></span><span style="display:flex;"><span>    pairs<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>array([[<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">5</span>], [<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>]]),
+</span></span><span style="display:flex;"><span>    figsize<span style="color:#f92672">=</span>[<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">5</span>],
+</span></span><span style="display:flex;"><span>    width_ratios<span style="color:#f92672">=</span>[<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">5</span>],
+</span></span><span style="display:flex;"><span>    height_ratios<span style="color:#f92672">=</span>[<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">5</span>],
+</span></span><span style="display:flex;"><span>    s<span style="color:#f92672">=</span><span style="color:#ae81ff">50</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><div class="centered-image">
+    <img src="/data_science_blog/images/nlp/transformers/calculate_attention_files/calculate_attention_8_0.png" alt="Attention Score" />
+    <p></p>
+</div>
+
+<hr>
+<h2 id="3-attention-probability">
+  3. Attention Probability
+  <a class="anchor" href="#3-attention-probability">#</a>
+</h2>
+<p>Using the softmax function, attention scores are normalized across key sequences for each query.</p>
+<p>Recall: Q and K originate from the same input.</p>
+<p>Attention probabilities depict the unique influence each sequence receives from other sequences.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">softmax</span>(x):
+</span></span><span style="display:flex;"><span>    exp_x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>exp(x)
+</span></span><span style="display:flex;"><span>    sum_exp_x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>sum(exp_x, axis<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>, keepdims<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> exp_x <span style="color:#f92672">/</span> sum_exp_x
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>attention_prob <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>apply_along_axis(softmax, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, attention_score)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>draw_mat_horizon_transfer(
+</span></span><span style="display:flex;"><span>    attention_score[<span style="color:#ae81ff">0</span>],
+</span></span><span style="display:flex;"><span>    attention_prob[<span style="color:#ae81ff">0</span>],
+</span></span><span style="display:flex;"><span>    info_a<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;Key Sequences&#34;</span>, <span style="color:#e6db74">&#34;Query Sequences&#34;</span>, <span style="color:#e6db74">&#34;Attention Score&#34;</span>],
+</span></span><span style="display:flex;"><span>    info_b<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;Key Sequences&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#e6db74">&#34;Attention Probabilities&#34;</span>],
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><div class="centered-image">
+    <img src="/data_science_blog/images/nlp/transformers/calculate_attention_files/calculate_attention_10_0.png" alt="Attention Probability" />
+    <p></p>
+</div>
+
+<hr>
+<h2 id="4-output">
+  4. Output
+  <a class="anchor" href="#4-output">#</a>
+</h2>
+<p>Q and K dictate the information flow proportion, while V carries the information itself.</p>
+<p>Every feature_i in a sequence is a linear blend of feature_i&rsquo;s from all sequences.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>draw_mat_multi(
+</span></span><span style="display:flex;"><span>    attention_prob[<span style="color:#ae81ff">0</span>],
+</span></span><span style="display:flex;"><span>    value[<span style="color:#ae81ff">0</span>],
+</span></span><span style="display:flex;"><span>    output[<span style="color:#ae81ff">0</span>],
+</span></span><span style="display:flex;"><span>    [<span style="color:#e6db74">&#34;Key Sequences&#34;</span>, <span style="color:#e6db74">&#34;Query Sequences&#34;</span>, <span style="color:#e6db74">&#34;Attention Probabilities&#34;</span>],
+</span></span><span style="display:flex;"><span>    [<span style="color:#e6db74">&#34;Fearues&#34;</span>, <span style="color:#e6db74">&#34;Sequences&#34;</span>, <span style="color:#e6db74">&#34;Value&#34;</span>],
+</span></span><span style="display:flex;"><span>    [<span style="color:#e6db74">&#34;Sequences&#34;</span>,<span style="color:#e6db74">&#34;Fearues&#34;</span>,  <span style="color:#e6db74">&#34;Output&#34;</span>],
+</span></span><span style="display:flex;"><span>    pairs<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>array([[<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>], [<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>]]),
+</span></span><span style="display:flex;"><span>    figsize<span style="color:#f92672">=</span>[<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">5</span>],
+</span></span><span style="display:flex;"><span>    width_ratios<span style="color:#f92672">=</span>[<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">2</span>],
+</span></span><span style="display:flex;"><span>    height_ratios<span style="color:#f92672">=</span>[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>],
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><div class="centered-image">
+    <img src="/data_science_blog/images/nlp/transformers/calculate_attention_files/calculate_attention_12_0.png" alt="Output" />
+    <p></p>
+</div>
+
+<hr>
+<h2 id="5-masked-attention-probabilities">
+  5. Masked Attention Probabilities
+  <a class="anchor" href="#5-masked-attention-probabilities">#</a>
+</h2>
+<p>To make layers prioritize neighboring word contexts, use the following mask.</p>
+<p>Of course, masks can be tailored as needed.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>seq_len <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>mask <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros((seq_len, seq_len))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(seq_len):
+</span></span><span style="display:flex;"><span>    mask[i, max(<span style="color:#ae81ff">0</span>, i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>):min(seq_len, i<span style="color:#f92672">+</span><span style="color:#ae81ff">2</span>)] <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Expand dimensions for batch size</span>
+</span></span><span style="display:flex;"><span>mask <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>expand_dims(mask, <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sns<span style="color:#f92672">.</span>heatmap(mask[<span style="color:#ae81ff">0</span>], cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;RdBu&#39;</span>, center<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><div class="centered-image">
+    <img src="/data_science_blog/images/nlp/transformers/calculate_attention_files/calculate_attention_14_0.png" alt="Mask" />
+    <p></p>
+</div>
+
+<hr>
+<p>We computed the probabilities again using the masked scores.
+Note that, the high probability in the point (2,5) disappeared.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>masked_attention_score <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>where(mask <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1e9</span>, attention_score)
+</span></span><span style="display:flex;"><span>masked_attention_prob <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>apply_along_axis(<span style="color:#66d9ef">lambda</span> x: np<span style="color:#f92672">.</span>exp(x) <span style="color:#f92672">/</span> np<span style="color:#f92672">.</span>sum(np<span style="color:#f92672">.</span>exp(x), axis<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>), <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, masked_attention_score)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>draw_mat_horizon_transfer(
+</span></span><span style="display:flex;"><span>    masked_attention_score[<span style="color:#ae81ff">0</span>],
+</span></span><span style="display:flex;"><span>    masked_attention_prob[<span style="color:#ae81ff">0</span>],
+</span></span><span style="display:flex;"><span>    info_a<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;Key Sequences&#34;</span>, <span style="color:#e6db74">&#34;Query Sequences&#34;</span>, <span style="color:#e6db74">&#34;Attention Score&#34;</span>],
+</span></span><span style="display:flex;"><span>    info_b<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;Key Sequences&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#e6db74">&#34;Attention Probabilities&#34;</span>],
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><div class="centered-image">
+    <img src="/data_science_blog/images/nlp/transformers/calculate_attention_files/calculate_attention_16_0.png" alt="Masked Attention Probabilities" />
+    <p></p>
+</div>
+
+<hr>
+<h2 id="6-function-for-attention-computation">
+  6. Function for Attention computation
+  <a class="anchor" href="#6-function-for-attention-computation">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">calculate_attention</span>(query, key, value, mask<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># query, key, value: (n_batch, seq_len, d_k)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># mask: (n_batch, seq_len, seq_len)</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    d_k <span style="color:#f92672">=</span> key<span style="color:#f92672">.</span>shape[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>    attention_score <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>matmul(query, np<span style="color:#f92672">.</span>transpose(key, (<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>))) <span style="color:#75715e"># Q x K^T, (n_batch, seq_len, seq_len)</span>
+</span></span><span style="display:flex;"><span>    attention_score <span style="color:#f92672">=</span> attention_score <span style="color:#f92672">/</span> np<span style="color:#f92672">.</span>sqrt(d_k)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> mask <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        attention_score <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>where(mask <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1e9</span>, attention_score)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    attention_prob <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>apply_along_axis(<span style="color:#66d9ef">lambda</span> x: np<span style="color:#f92672">.</span>exp(x) <span style="color:#f92672">/</span> np<span style="color:#f92672">.</span>sum(np<span style="color:#f92672">.</span>exp(x), axis<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>), <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, attention_score)
+</span></span><span style="display:flex;"><span>    out <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>matmul(attention_prob, value) <span style="color:#75715e"># (n_batch, seq_len, d_k)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> out
+</span></span></code></pre></div><h2 id="7setup-run-this-first-to-practice-with-codes">
+  7.Setup (Run this first to practice with codes)
+  <a class="anchor" href="#7setup-run-this-first-to-practice-with-codes">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.gridspec <span style="color:#66d9ef">as</span> gridspec
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> seaborn <span style="color:#66d9ef">as</span> sns
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">draw_mat_multi</span>(mat_a, mat_b, mat_ab, info_a<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>, info_b<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>, info_ab<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>, pairs<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>array([[<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>],[<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>]]), figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">5</span>), width_ratios<span style="color:#f92672">=</span>[<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>], height_ratios<span style="color:#f92672">=</span>[<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>], linewidth<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, s<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Adjusting pairs for visualization</span>
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> pairs <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        pairs <span style="color:#f92672">=</span> pairs <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>figsize)
+</span></span><span style="display:flex;"><span>    gs <span style="color:#f92672">=</span> gridspec<span style="color:#f92672">.</span>GridSpec(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>, width_ratios<span style="color:#f92672">=</span>width_ratios, height_ratios<span style="color:#f92672">=</span>height_ratios)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Attention Probabilities visualization</span>
+</span></span><span style="display:flex;"><span>    ax0 <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplot(gs[<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>    sns<span style="color:#f92672">.</span>heatmap(mat_a, cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;RdBu&#39;</span>, center<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, cbar<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> pairs <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        ax0<span style="color:#f92672">.</span>axhline(y<span style="color:#f92672">=</span>pairs[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">0</span>], color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;blue&#39;</span>, linewidth<span style="color:#f92672">=</span>linewidth)
+</span></span><span style="display:flex;"><span>        ax0<span style="color:#f92672">.</span>axhline(y<span style="color:#f92672">=</span>pairs[<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">0</span>], color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>, linewidth<span style="color:#f92672">=</span>linewidth)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> info_a <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        ax0<span style="color:#f92672">.</span>set_xlabel(info_a[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>        ax0<span style="color:#f92672">.</span>set_ylabel(info_a[<span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>        ax0<span style="color:#f92672">.</span>set_title(info_a[<span style="color:#ae81ff">2</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Value matrix visualization</span>
+</span></span><span style="display:flex;"><span>    ax1 <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplot(gs[<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>    sns<span style="color:#f92672">.</span>heatmap(mat_b, cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;RdBu&#39;</span>, center<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, cbar<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> pairs <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        ax1<span style="color:#f92672">.</span>axvline(x<span style="color:#f92672">=</span>pairs[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">1</span>], color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;blue&#39;</span>, linewidth<span style="color:#f92672">=</span>linewidth)
+</span></span><span style="display:flex;"><span>        ax1<span style="color:#f92672">.</span>axvline(x<span style="color:#f92672">=</span>pairs[<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">1</span>], color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>, linewidth<span style="color:#f92672">=</span>linewidth)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> info_b <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        ax1<span style="color:#f92672">.</span>set_xlabel(info_b[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>        ax1<span style="color:#f92672">.</span>set_ylabel(info_b[<span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>        ax1<span style="color:#f92672">.</span>set_title(info_b[<span style="color:#ae81ff">2</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Output of attention mechanism visualization</span>
+</span></span><span style="display:flex;"><span>    ax2 <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplot(gs[<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>    sns<span style="color:#f92672">.</span>heatmap(mat_ab, cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;RdBu&#39;</span>, center<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, cbar<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> pairs <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        ax2<span style="color:#f92672">.</span>scatter(pairs[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">1</span>], pairs[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">0</span>], color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;blue&#39;</span>, s<span style="color:#f92672">=</span>s)
+</span></span><span style="display:flex;"><span>        ax2<span style="color:#f92672">.</span>scatter(pairs[<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">1</span>], pairs[<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">0</span>], color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>, s<span style="color:#f92672">=</span>s)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> info_ab <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        ax2<span style="color:#f92672">.</span>set_xlabel(info_ab[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>        ax2<span style="color:#f92672">.</span>set_ylabel(info_ab[<span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>        ax2<span style="color:#f92672">.</span>set_title(info_ab[<span style="color:#ae81ff">2</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    plt<span style="color:#f92672">.</span>tight_layout()
+</span></span><span style="display:flex;"><span>    plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">draw_mat_horizon_transfer</span>(mat_a, mat_b, info_a, info_b):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Create a gridspec for matrix multiplication visualization</span>
+</span></span><span style="display:flex;"><span>    fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">3</span>))
+</span></span><span style="display:flex;"><span>    gs <span style="color:#f92672">=</span> gridspec<span style="color:#f92672">.</span>GridSpec(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, width_ratios<span style="color:#f92672">=</span>[<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Attention Probabilities visualization</span>
+</span></span><span style="display:flex;"><span>    ax0 <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplot(gs[<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>    sns<span style="color:#f92672">.</span>heatmap(mat_a, cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;RdBu&#39;</span>, center<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, cbar<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    ax0<span style="color:#f92672">.</span>axhline(y<span style="color:#f92672">=</span><span style="color:#ae81ff">2.5</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;blue&#39;</span>, linewidth<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> info_a <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        ax0<span style="color:#f92672">.</span>set_xlabel(info_a[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>        ax0<span style="color:#f92672">.</span>set_ylabel(info_a[<span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>        ax0<span style="color:#f92672">.</span>set_title(info_a[<span style="color:#ae81ff">2</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Value matrix visualization</span>
+</span></span><span style="display:flex;"><span>    ax1 <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplot(gs[<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>    sns<span style="color:#f92672">.</span>heatmap(mat_b, cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;RdBu&#39;</span>, center<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, cbar<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    ax1<span style="color:#f92672">.</span>axhline(y<span style="color:#f92672">=</span><span style="color:#ae81ff">2.5</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;blue&#39;</span>, linewidth<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> info_b <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        ax1<span style="color:#f92672">.</span>set_xlabel(info_b[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>        ax1<span style="color:#f92672">.</span>set_ylabel(info_b[<span style="color:#ae81ff">1</span>])
+</span></span><span style="display:flex;"><span>        ax1<span style="color:#f92672">.</span>set_title(info_b[<span style="color:#ae81ff">2</span>])
+</span></span></code></pre></div></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#contents">Contents</a></li>
+    <li><a href="#1-initializing-query-key-and-value">1. Initializing Query, Key, and Value</a></li>
+    <li><a href="#2-attention-score">2. Attention Score</a></li>
+    <li><a href="#3-attention-probability">3. Attention Probability</a></li>
+    <li><a href="#4-output">4. Output</a></li>
+    <li><a href="#5-masked-attention-probabilities">5. Masked Attention Probabilities</a></li>
+    <li><a href="#6-function-for-attention-computation">6. Function for Attention computation</a></li>
+    <li><a href="#7setup-run-this-first-to-practice-with-codes">7.Setup (Run this first to practice with codes)</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://crimson206.github.io/data_science_blog/css/styles.min.css">
