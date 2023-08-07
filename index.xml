@@ -8,16 +8,6 @@
     <language>en-us</language>
     <lastBuildDate>Tue, 20 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://crimson206.github.io/data_science_blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Introduction</title>
-      <link>https://crimson206.github.io/data_science_blog/docs/data_science/sgd/introduction/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://crimson206.github.io/data_science_blog/docs/data_science/sgd/introduction/</guid>
-      <description>Introduction#The fundamental concept behind gradient descent is to minimize a function \(E = E(w)\). The gradient \(\nabla_\mathbf{W} E\)indicates the direction in which \(E\)increases the fastest at a point, and the objective is to modify the values of \(\mathbf{W}\)iteratively to minimize \(E\). This is achieved by updating the values of \(w\)as follows:
-\[\mathbf{W}^{\prime}=\mathbf{W}-\eta \nabla_\mathbf{W} E \]Here, \(\eta\)is the learning rate.</description>
-    </item>
-    
-    <item>
       <title>About this Page</title>
       <link>https://crimson206.github.io/data_science_blog/posts/about-page/</link>
       <pubDate>Tue, 20 Jun 2023 00:00:00 +0000</pubDate>
@@ -27,6 +17,41 @@
 This blog is dedicated to sharing what I&amp;rsquo;ve learned, with a focus on data science. I am passionate about topics like machine learning, artificial intelligence, and autonomous programming.
 The main purpose of this webpage is to provide educational content and insights into the fascinating field of data science. As I continue to deepen my understanding and knowledge, I will share valuable information with you.
 While the majority of the posts will revolve around data science, I may also explore other related topics.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://crimson206.github.io/data_science_blog/docs/data_science/nlp/transformers/calculate_attention/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://crimson206.github.io/data_science_blog/docs/data_science/nlp/transformers/calculate_attention/</guid>
+      <description>Attention Calculation#In the following section, we&amp;rsquo;ll explore the core concept of attention calculation in Transformers, an integral mechanism that empowers them to capture relationships within sequences.
+Discover how Queries, Keys, and Values interact to create this impactful feature.
+Contents#Query, Key and Value Attention Score Attention Probability Output Mask Fuction : calculate_attention Setup (Run this first to practice with codes) 1. Initializing Query, Key, and Value#In Transformers, we deal with three main components: Query, Key, and Value.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://crimson206.github.io/data_science_blog/docs/data_science/nlp/transformers/position_embedding/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://crimson206.github.io/data_science_blog/docs/data_science/nlp/transformers/position_embedding/</guid>
+      <description>Positional Encoding#Positional encoding is a technique used in Transformers to provide sequence-awareness.
+By adding unique patterns to token embeddings based on their position in a sequence, the Transformer model can discern token order.
+Contents#PositionalEncoding ArbitraryInput PosionalEncoding PatternAnalysis PositionPrediction Post-Processing? Summary 0. Layer Implementation#In this article, we will the class,
+import numpy as np import math import matplotlib.pyplot as plt class PositionalEncoding: def __init__(self, d_embed, max_len=400): encoding = np.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://crimson206.github.io/data_science_blog/docs/data_science/nlp/transformers/token_embedding/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://crimson206.github.io/data_science_blog/docs/data_science/nlp/transformers/token_embedding/</guid>
+      <description>Token Embedding#Token embeddings provide a numerical representation for words, capturing their semantic meaning and allowing machines to process and understand text.
+This article delves into the mechanics of token embeddings, from tokenization to weight adjustments in neural networks.
+Contents#Tokenizing Embedding Forward Backward WrappingUp 1.Tokenizing#Assume that We have vocabulary items (or tokens)
+token_size = 5 vocas = [f&amp;#34;voca{i}&amp;#34; for i in range(token_size)] tokens = [i for i in range(token_size)] print(&amp;#34;\nvocas:\n&amp;#34;, vocas) print(&amp;#34;\ntokenized_vocas:\n&amp;#34;, tokens) vocas:[&#39;voca0&#39;, &#39;voca1&#39;, &#39;voca2&#39;, &#39;voca3&#39;, &#39;voca4&#39;]tokenized_vocas:[0, 1, 2, 3, 4]2.</description>
     </item>
     
   </channel>
