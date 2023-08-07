@@ -1,20 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Stochastic Gradient Descent on Discovering Data Science with Crimson</title>
-    <link>https://crimson206.github.io/data_science_blog/docs/data_science/sgd/</link>
-    <description>Recent content in Stochastic Gradient Descent on Discovering Data Science with Crimson</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://crimson206.github.io/data_science_blog/docs/data_science/sgd/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Introduction</title>
-      <link>https://crimson206.github.io/data_science_blog/docs/data_science/sgd/introduction/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://crimson206.github.io/data_science_blog/docs/data_science/sgd/introduction/</guid>
-      <description>Introduction#The fundamental concept behind gradient descent is to minimize a function \(E = E(w)\). The gradient \(\nabla_\mathbf{W} E\)indicates the direction in which \(E\)increases the fastest at a point, and the objective is to modify the values of \(\mathbf{W}\)iteratively to minimize \(E\). This is achieved by updating the values of \(w\)as follows:
-\[\mathbf{W}^{\prime}=\mathbf{W}-\eta \nabla_\mathbf{W} E \]Here, \(\eta\)is the learning rate.</description>
-    </item>
-    
-  </channel>
-</rss>
